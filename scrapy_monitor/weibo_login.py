@@ -14,7 +14,7 @@ import base64
 import os
 import random
 from sys import version_info
-U_List = [{'USERNAME':'ifk513@163.com','PASSWORD':'KOAoym666yp'},{'USERNAME':'13054220294','PASSWORD':'nnf016407f'},{'USERNAME':'yuqemo@163.com','PASSWORD':'BXDfox641xW'},{'USERNAME':'mla352@163.com','PASSWORD':'BDXiix7532X'},{'USERNAME':'ioscce@163.com','PASSWORD':'CJQwdh109Ut'}]
+U_List = [{'USERNAME':'ifk513@163.com','PASSWORD':'KOAoym666yp'},{'USERNAME':'yuqemo@163.com','PASSWORD':'BXDfox641xW'},{'USERNAME':'mla352@163.com','PASSWORD':'BDXiix7532X'},{'USERNAME':'ioscce@163.com','PASSWORD':'CJQwdh109Ut'}]
 from selenium.webdriver.chrome.options import Options
 chrome_options = Options()
 chrome_options.add_argument('--no-sandbox')
@@ -44,7 +44,7 @@ class CrackWeiboSlide():
         # self.browser = webdriver.Chrome()
         self.browser = webdriver.Chrome(chrome_options=chrome_options)
         self.wait = WebDriverWait(self.browser, 20)
-        i = random.randint(0,4)
+        i = random.randint(0,3)
         self.username = U_List[i]['USERNAME']
         self.password = U_List[i]['PASSWORD']
 
@@ -107,6 +107,8 @@ class CrackWeiboSlide():
         cap.send_keys(result)
         submit.click()
         time.sleep(10)
+        self.browser.get('https://weibo.com/')
+        time.sleep(15)
         cookies = {i["name"]: i["value"] for i in self.browser.get_cookies()}
         print(len(cookies))
         print(cookies)
@@ -125,6 +127,8 @@ class CrackWeiboSlide():
             self.open()
             return self.get_image()
         except:
+            self.browser.get('https://weibo.com/')
+            time.sleep(10)
             cookies = {i["name"]: i["value"] for i in self.browser.get_cookies()}
             return cookies
 
@@ -136,11 +140,12 @@ def get_cookie():
     while (len(cookies) <= 1):
         num = num+1
         print("获取第"+str(num)+"次")
+        print('cookies长度：',len(cookies))
         if(num>30):
             print("重新选择账号密码")
             crack = CrackWeiboSlide()
-        print(len(cookies))
         cookies=crack.main()
+        print('cookies长度：', len(cookies))
     with open(os.path.join(os.path.dirname(__file__), '../scrapy_monitor/cookie.json'), 'w') as f:
         json.dump(cookies, f,ensure_ascii=False)
         print(cookies)
@@ -153,13 +158,12 @@ if __name__ == '__main__':
     while (len(cookies) <= 1):
         print("获取第"+str(num)+"次")
         num = num + 1
+        print('cookies长度：', len(cookies))
         if (num > 20):
             print("重新选择账号密码")
             crack = CrackWeiboSlide()
-        print(len(cookies))
-        cookies = crack.main()
-        print(len(cookies))
         cookies=crack.main()
+        print('cookies长度：', len(cookies))
     with open(os.path.join(os.path.dirname(__file__), '../scrapy_monitor/cookie.json'), 'w') as f:
         json.dump(cookies, f,ensure_ascii=False)
         print(cookies)

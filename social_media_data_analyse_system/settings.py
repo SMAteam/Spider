@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # '“7django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -91,8 +91,8 @@ DATABASES = {
         'NAME': 'social_media',
         'USER': 'root',
         'PASSWORD': '123456',
-        'HOST': '152.136.59.62',
-        'PORT': '3307',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'}
     },
 }

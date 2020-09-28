@@ -17,7 +17,7 @@ import base64
 import os
 import random
 from sys import version_info
-U_List = [{'USERNAME':'ifk513@163.com','PASSWORD':'KOAoym666yp'},{'USERNAME':'13054220294','PASSWORD':'nnf016407f'},{'USERNAME':'yuqemo@163.com','PASSWORD':'BXDfox641xW'},{'USERNAME':'mla352@163.com','PASSWORD':'BDXiix7532X'},{'USERNAME':'ioscce@163.com','PASSWORD':'CJQwdh109Ut'}]
+U_List = [{'USERNAME':'13954630660','PASSWORD':'whj123456'}]
 from selenium.webdriver.chrome.options import Options
 chrome_options = Options()
 chrome_options.add_argument('--no-sandbox')
@@ -47,12 +47,12 @@ class CrackWeiboSlide():
         self.browser = webdriver.Chrome()
         # self.browser = webdriver.Chrome(chrome_options=chrome_options)
         self.wait = WebDriverWait(self.browser, 15)
-        i = random.randint(0,4)
+        i = random.randint(0,0)
         self.username = U_List[i]['USERNAME']
         self.password = U_List[i]['PASSWORD']
 
-    def __del__(self):
-        self.browser.close()
+    # def __del__(self):
+    #     self.browser.close()
 
     def open(self):
         """
@@ -65,61 +65,21 @@ class CrackWeiboSlide():
         submit = self.wait.until(EC.element_to_be_clickable((By.ID, 'loginAction')))
         username.send_keys(self.username)
         password.send_keys(self.password)
+        time.sleep(3)
+        submit.click()
+        yanzhengma  = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'm-btn-orange')))
+        yanzhengma.click()
         time.sleep(10)
-        submit.click()
-
-    def get_position(self):
-        """
-        获取验证码位置
-        :return: 验证码位置元组
-        """
-        try:
-            img = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'code_img')))
-        except TimeoutException:
-            print('未出现验证码')
-            self.open()
-        time.sleep(2)
-        location = img.location
-        size = img.size
-        # top, bottom, left, right = location['y']+70, location['y'] +130, location['x']+120, location['x'] + 250
-        top, bottom, left, right = location['y'], location['y'] + size['height'], location['x'], location['x'] + size['width']
-        return (top, bottom, left, right)
-
-    def get_screenshot(self):
-        """
-        获取网页截图
-        :return: 截图对象
-        """
-        screenshot = self.browser.get_screenshot_as_png()
-        screenshot = Image.open(BytesIO(screenshot))
-        return screenshot
-
-    def get_image(self, name='captcha.png'):
-        """
-        获取验证码图片
-        :return: 图片对象
-        """
-        top, bottom, left, right = self.get_position()
-        print('验证码位置', top, bottom, left, right)
-        screenshot = self.get_screenshot()
-        captcha = screenshot.crop((left, top, right, bottom))
-        captcha.save(name)
-        result = base64_api(uname='sendoh', pwd='whj970519', img=captcha)
-        print(result)
-        submit = self.wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'W_btn_a')))
-        cap = self.wait.until(EC.presence_of_element_located((By.ID, 'door')))
-        cap.send_keys(result)
-        submit.click()
+        keyword = 552921
+        passt = self.wait.until(EC.presence_of_element_located((By.TAG_NAME, 'input')))
+        passt.send_keys(keyword)
+        login = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'm-btn-block')))
+        login.click()
         time.sleep(10)
         cookies = {i["name"]: i["value"] for i in self.browser.get_cookies()}
         print(len(cookies))
         print(cookies)
-
-
-        return cookies
-
-
-
+        time.sleep(10)
     def main(self):
         """
         批量获取验证码
@@ -127,44 +87,12 @@ class CrackWeiboSlide():
         """
         try:
             self.open()
-            return self.get_image()
         except:
             cookies = {i["name"]: i["value"] for i in self.browser.get_cookies()}
             return cookies
-
-
-def get_cookie():
-    num=0
-    crack = CrackWeiboSlide()
-    cookies={}
-    while (len(cookies) <= 1):
-        num = num+1
-        print("获取第"+str(num)+"次")
-        if(num>30):
-            print("重新选择账号密码")
-            crack = CrackWeiboSlide()
-        print(len(cookies))
-        cookies=crack.main()
-    with open(os.path.join(os.path.dirname(__file__), '../data_model/cookie.json'), 'w') as f:
-        json.dump(cookies, f,ensure_ascii=False)
-        print(cookies)
-        print("cookies写入成功")
 
 if __name__ == '__main__':
     num = 0
     crack = CrackWeiboSlide()
     cookies={}
-    while (len(cookies) <= 1):
-        print("获取第"+str(num)+"次")
-        num = num + 1
-        if (num > 20):
-            print("重新选择账号密码")
-            crack = CrackWeiboSlide()
-        print(len(cookies))
-        cookies = crack.main()
-        print(len(cookies))
-        cookies=crack.main()
-    with open(os.path.join(os.path.dirname(__file__), '../data_model/cookie.json'), 'w') as f:
-        json.dump(cookies, f,ensure_ascii=False)
-        print(cookies)
-        print("cookies写入成功")
+    crack.main()

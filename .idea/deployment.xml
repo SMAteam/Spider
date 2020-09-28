@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="灾害分析系统">
+    <serverData>
+      <paths name="灾害分析系统">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/web/scrapy_system" local="$PROJECT_DIR$/" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

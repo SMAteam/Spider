@@ -14,11 +14,20 @@ class scrapy_manage(models.Model):
     real_time_task = models.CharField(max_length=2, null=True, blank=True)
     class Meta:
         db_table = "scrapy_manage"
+class weibo_user(models.Model):
+    user_id = models.CharField(primary_key=True,max_length=100)
+    post_name = models.CharField(max_length=100)
+    prov = models.CharField(max_length=100,null=True,blank=True)
+    city = models.CharField(max_length=100,null=True,blank=True)
+    authentication = models.CharField(max_length=100,null=True,blank=True)
+    fans =models.IntegerField(null=True,blank=True)
+    interest =models.IntegerField(null=True,blank=True)
+    weibo_num =models.IntegerField(null=True,blank=True)
+    class Meta:
+        db_table = "weibo_user"
 class weibo_post(models.Model):
-    user_id = models.CharField(max_length=100,null=True,blank=True)
+    user_id = models.CharField(max_length=100)
     post_id = models.CharField(max_length=100,)
-    # authentication = models.CharField(max_length=100,null=True)
-    # post_name = models.CharField(max_length=100,null=True)
     post_content = models.TextField(null=True,blank=True)
     post_time = models.DateTimeField(null=True,blank=True)
     forward_num = models.IntegerField(null=True,blank=True)
@@ -28,14 +37,9 @@ class weibo_post(models.Model):
     task_id = models.CharField(max_length=20)
     # 接下来设置联合主键
     class Meta:
-        unique_together = ("post_id","task_id")
+        ("post_id","task_id")
         db_table = "weibo_post"
-class weibo_user(models.Model):
-    user_id = models.CharField(max_length=100)
-    fans_num = models.IntegerField(null=True,blank=True)
-    authentication = models.CharField(max_length=1,null=True,blank=True)
-    class Meta:
-        db_table = "weibo_user"
+
 class noise_judge(models.Model):
     post_id = models.CharField(max_length=100)
     task_id = models.CharField(max_length=100)

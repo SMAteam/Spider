@@ -13,14 +13,15 @@ celery==3.1.26.post2
 certifi==2020.6.20
 cffi==1.14.0
 chardet==3.0.4
-chromedriver-binary==2.38.0
 click==7.1.2
 constantly==15.1.0
 cryptography==2.9.2
 cssselect==1.1.0
 Django==3.0.3
 django-celery==3.3.1
+django-cors-headers==3.5.0
 django-picklefield==3.0.1
+django-redis-sessions==0.6.1
 django-timezone-field==4.0
 emoji==0.5.4
 ephem==3.7.7.1

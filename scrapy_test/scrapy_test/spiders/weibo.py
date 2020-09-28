@@ -7,7 +7,8 @@ import base64
 import requests
 import datetime
 from urllib import parse
-from ..items import PostItem
+from data_model.models import weibo_user
+from ..items import PostItem,UserItem
 import logging
 import re
 import random
@@ -123,14 +124,16 @@ class WeiboSpider(scrapy.Spider):
                 like_num = int(num_re.search(bottom[-1]).group())
             authentication_text = post.xpath('.//*[@class="info"]//a/@title').extract()
             post_name = post.xpath('.//div[@class="content"]/div//a[@class="name"]/text()').extract_first()
-            if authentication_text==[]:
+            if authentication_text == []:
                 authentication_text.append('其他用户')
-            if '微博个人认证' in authentication_text:
-                authentication = 1
-            elif '微博官方认证' in authentication_text:
-                authentication = 2
+            if '微博官方认证' in authentication_text:
+                authentication = '1'
+            elif '微博个人认证' in authentication_text:
+                authentication = '2'
+            elif '微博会员' in authentication_text:
+                authentication = '3'
             else:
-                authentication = 3
+                authentication = '4'
             # 发帖user_id和post_id
             try:
                 #提取帖子发布时间
@@ -171,16 +174,13 @@ class WeiboSpider(scrapy.Spider):
                 # 帖子链接
                 original_post_url = post.xpath('.//div[@class="content"]/p[@class="from"]/a[1]/@href').extract_first()
                 user_id = re.search(r'/(\d+)/', original_post_url).group(1)
-                print("这是用户的id",user_id)
-
-                if user_url != None:
-                    print("进行到这一步")
-                    # user_url = "https:"+user_url
-                    # user_url = user_url[12:]
-                    user_url = 'https://weibo.com/'+ user_id+'/info?sudaref=s.weibo.com&display=0&retcode=6102'
-                    print("这是用户的信息链接", user_url)
-
-                    # yield scrapy.Request(url=user_url, callback=self.user_extract,cookies=self.cookies, meta={'user_id': user_id})
+                if(weibo_user.objects.filter(user_id=user_id).exists()==False):
+                    print("添加新用户")
+                    if user_id != None:
+                        user_url = 'https://weibo.com/p/100505'+user_id+'/home?from=page_100505&mod=TAB&is_hot=1#place'
+                        yield scrapy.Request(url=user_url, callback=self.user_extract,cookies=self.cookies, meta={'authentication': authentication,'user_id':user_id,'post_name':post_name})
+                else:
+                    print("用户已存在")
                 post_id = re.search(r'/([a-zA-Z0-9]+)\?', original_post_url).group(1)
 
                 content = post.xpath('.//div[@class="content"]')
@@ -229,7 +229,27 @@ class WeiboSpider(scrapy.Spider):
                         repost_user_id = re.search(r'/(\d+)/', re_post_url).group(1)
                         # 转贴的帖子的id
                         repost_id = re.search(r'/([a-zA-Z0-9]+)\?', re_post_url).group(1)
-
+                        repost_user_name = post.xpath('.//div[@class="content"]/div[@class="card-comment"]/div[@class="con"]/div/div[1]/a[1]/@nick-name').extract_first()
+                        repost_authentication_text = post.xpath('.//div[@class="content"]/div[@class="card-comment"]/div[@class="con"]/div/div[1]/a[2]/@title').extract_first()
+                        if repost_authentication_text == []:
+                            repost_authentication_text.append('其他用户')
+                        if '微博官方认证' in repost_authentication_text:
+                            repost_authentication = '1'
+                        elif '微博个人认证' in repost_authentication_text:
+                            repost_authentication = '2'
+                        elif '微博会员' in repost_authentication_text:
+                            repost_authentication = '3'
+                        else:
+                            repost_authentication = '4'
+                        if (weibo_user.objects.filter(user_id=repost_user_id).exists() == False):
+                            print("添加新用户")
+                            if repost_user_id != None:
+                                print("这转发是用户的id", repost_user_id)
+                                repost_user_url = 'https://weibo.com/p/100505' + repost_user_id + '/home?from=page_100505&mod=TAB&is_hot=1#place'
+                                print("这是转发用户的信息链接", repost_user_url)
+                                yield scrapy.Request(url=repost_user_url, callback=self.user_extract, cookies=self.cookies,meta={'authentication': repost_authentication, 'user_id': repost_user_id,'post_name': repost_user_name})
+                        else:
+                            print("用户已存在")
                         # 转发的帖子的点赞评论数时间等
                         repost_time = post.xpath(
                             './/div[@class="content"]//div[@class="con"]//div[@class="func"]/p[@class="from"]/a[1]/text()').extract_first()
@@ -309,8 +329,6 @@ class WeiboSpider(scrapy.Spider):
                         item = PostItem()
                         item['user_id'] = user_id
                         item['post_id'] = post_id
-                        # item['authentication'] = authentication_text[0]
-                        # item['post_name'] = post_name
                         item['post_content'] = emoji.demojize(original_content)
                         item['post_time'] = post_time
                         item['forward_num'] = forward_num
@@ -322,8 +340,6 @@ class WeiboSpider(scrapy.Spider):
                         reitem = PostItem()
                         reitem['user_id'] = repost_user_id
                         reitem['post_id'] = repost_id
-                        # reitem['authentication'] = authentication_text[0]
-                        # reitem['post_name'] = post_name
                         reitem['post_content'] = emoji.demojize(repost_content)
                         reitem['post_time'] = repost_time
                         reitem['forward_num'] = repost_forward_num
@@ -347,11 +363,71 @@ class WeiboSpider(scrapy.Spider):
                     item['task_id'] = self.task_id
                     yield item
     def user_extract(self,response):
-        print("这是用户信息提取界面")
-        user_id = response.meta["user_id"]
-        user_name = None
-        user_name = response.xpath('.//div[@class="pf_username"]//h1/text()').extract()
-        print("这是我的用户名",user_name)
-        print(user_id)
-        pass
+        print("到达这个网页")
+        authentication = response.meta['authentication']
+        user_id = response.meta['user_id']
+        post_name =response.meta['post_name']
+        html = response.body.decode('utf-8')
+        html= str(html)
+        html = html.replace('\\t', '').replace('\\n', '').replace('\\r', '').replace(' ', '').replace('', '')
+        try:
+            location = re.findall(r'<spanclass=\\"item_icoW_fl\\"><emclass=\\"W_ficonficon_cd_placeS_ficon\\">2<\\/em><\\/span><spanclass=\\"item_textW_fl\\">([\u4e00-\u9fff]+)<',html)[0]
+            if response.meta["authentication"] == '1':
+                province = None
+                city = None
+            else:
+                lenth = len(location)
+                if (len(location) > 2):
+                    if ('内蒙古' in location or '黑龙江' in location):
+                        province = location[0:2]
+                        city = location[2:lenth]
+                        print('省:' + province + '市:' + city)
+                    else:
+                        province = location[0:2]
+                        city = location[2:lenth]
+                        print('省:' + province + '市:' + city)
+                else:
+                    if ('内蒙古' in location or '黑龙江' in location):
+                        province = location[0:2]
+                        print('省:' + province)
+
+                    else:
+                        province = location[0:2]
+                        print('省:' + province)
+                        city = None
+
+        except:
+            province = None
+            city = None
+        try:
+            interest = re.findall(r'<strongclass=\\"W_f18\\">(\d+)<\\/strong><spanclass=\\"S_txt2\\">关注<\\/span>',html)[0]
+            if interest == None:
+                interest = re.findall(r'的关注\((\d+)\)', html)[0]
+            interest = int(interest)
+        except:
+            interest = None
+        try:
+            fans = re.findall(r'<strongclass=\\"W_f18\\">(\d+)<\\/strong><spanclass=\\"S_txt2\\">粉丝<\\/span>',html)[0]
+            if fans==None:
+                fans = re.findall(r'的粉丝\((\d+)\)', html)[0]
+            fans = int(fans)
+        except:
+            fans = None
+        try:
+            weibo_num = re.findall(r'<strongclass=\\"W_f18\\">(\d+)<\\/strong><spanclass=\\"S_txt2\\">微博<\\/span>',html)[0]
+            weibo_num = int(weibo_num)
+        except:
+            weibo_num = None
+        user_item = UserItem()
+        user_item['user_id'] = user_id
+        user_item['authentication'] = authentication
+        user_item['post_name'] = post_name
+        user_item['prov'] = province
+        user_item['city'] = city
+        user_item['interest'] = interest
+        user_item['fans'] = fans
+        user_item['weibo_num'] = weibo_num
+        user_item.save()
+        return
+
 
