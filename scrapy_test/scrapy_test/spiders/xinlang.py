@@ -48,6 +48,14 @@ class XinlangSpider(scrapy.Spider):
             item['task_id']=self.task_id
             #标题
             li_title = li.xpath('.//h2/a')
+            post_url = li.xpath('.//h2/a/@href').extract_first()
+            item['post_id'] = re.findall('sina.com.cn/article_([\w]+).html',post_url)
+            if(item['post_id']==[]):
+                item['post_id'] = re.findall('/([\w-]+).shtml',post_url)
+            if(item['post_id']==[]):
+                item['post_id'].append(post_url)
+            item['post_id'] = item['post_id'][0]
+            print('这是转发的id',item['post_id'])
             item['title'] = li_title.xpath('string(.)').extract_first()
             #作者和日期
             tmp = li.xpath('.//h2/span/text()').extract_first().strip()

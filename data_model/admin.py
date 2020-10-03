@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import scrapy_manage,weibo_post,xinlang_new,xinlang_manage
+from .models import scrapy_manage,weibo_post,xinlang_new,xinlang_manage,weibo_user
 
 class Scrapy_manageAdmin(admin.ModelAdmin):
     #列表页属性
@@ -17,7 +17,6 @@ class Scrapy_manageAdmin(admin.ModelAdmin):
     list_filter = ['real_time_task']
     # 搜索字段
     search_fields = ['task_id']
-    search_fields=[]
     list_per_page = 50
     #添加，修改页属性
     #属性的先后顺序
@@ -36,6 +35,13 @@ class Weibo_postAdmin(admin.ModelAdmin):
     list_per_page=100
 
 admin.site.register(weibo_post,Weibo_postAdmin)
+
+class Weibo_userAdmin(admin.ModelAdmin):
+    list_display = ['user_id','post_name','prov','city','authentication','fans','interest','weibo_num']
+    list_filter = ['prov']
+    search_fields = ['user_id','post_name','prov','city']
+    list_per_page = 100
+admin.site.register(weibo_user,Weibo_userAdmin)
 
 class Xinlang_newsAdmin(admin.ModelAdmin):
     list_display = ['task_id','post_id','author','date','title','brief','content','detail_link']

@@ -37,7 +37,8 @@ class weibo_post(models.Model):
     task_id = models.CharField(max_length=20)
     # 接下来设置联合主键
     class Meta:
-        ("post_id","task_id")
+        unique_together = ("post_id","task_id")
+        ordering = ["post_time","forward_num","comment_num","like_num"]
         db_table = "weibo_post"
 
 class noise_judge(models.Model):
@@ -83,7 +84,7 @@ class xinlang_manage(models.Model):
 
 
 class xinlang_new(models.Model):
-    post_id = models.AutoField(primary_key=True)
+    post_id = models.CharField(primary_key=True,max_length=100)
     author = models.CharField(max_length=100)
     date = models.DateTimeField(null=True,blank=True)
     title = models.TextField(null=True,blank=True)

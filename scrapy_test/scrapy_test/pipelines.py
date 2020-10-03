@@ -28,6 +28,7 @@ class ScrapyTestPipeline:
             #处理新浪新闻数据
             if spider.name == "xinlang":
                 Xitem = XinlangItem()
+                Xitem["post_id"]= item["post_id"]
                 item["title"] = re.sub('原标题：[【】《》！、，。,\u4e00-\u9fff]+\s+','',item["title"])
                 item["title"] = re.sub(
                     '([\u4e00-\u9fff]+客户端[\u4e00-\u9fff]*[\|:，：,。！.]*)|(([\u4e00-\u9fff]+新闻[\u4e00-\u9fff]*[\|:，：,。！.]*)|([\u4e00-\u9fff]+网[\u4e00-\u9fff]*[\|:，：,。！.]*)|([\u4e00-\u9fff]+早报[\|:，：,。！.]*)|([\u4e00-\u9fff]+资讯[\|:，：.,。！]*)|([\u4e00-\u9fff]+晚报[\|:，：,。！]*)|(@[\u4e00-\u9fff]+[\|:，：.,。！]*))',

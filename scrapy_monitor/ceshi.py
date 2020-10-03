@@ -14,3 +14,6 @@ str4 = "@齐鲁8，山东发布山洪灾害预警！涉及潍坊临沂等6市"
 str5 = re.sub('(([\u4e00-\u9fff]+网[\u4e00-\u9fff]*[\|:，：,。！.]*)|([\u4e00-\u9fff]+早报[\|:，：,。！.]*)|([\u4e00-\u9fff]+资讯[\|:，：.,。！]*)|([\u4e00-\u9fff]+晚报[\|:，：,。！]*)|(@[\u4e00-\u9fff]+[\|:，：.,。！]*))','',str4)
 print(str5)
 print(str3)
+str6 = "sda/sda_2019d.shtml"
+str7 = re.findall('sda/([\w-]+)',str6)
+print(str7)
