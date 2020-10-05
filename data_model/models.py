@@ -16,8 +16,8 @@ class scrapy_manage(models.Model):
         db_table = "scrapy_manage"
 class weibo_user(models.Model):
     user_id = models.CharField(primary_key=True,max_length=100)
-    post_name = models.CharField(max_length=100)
-    prov = models.CharField(max_length=100,null=True,blank=True)
+    user_name = models.CharField(max_length=100)
+    province = models.CharField(max_length=100,null=True,blank=True)
     city = models.CharField(max_length=100,null=True,blank=True)
     authentication = models.CharField(max_length=100,null=True,blank=True)
     fans =models.IntegerField(null=True,blank=True)
@@ -38,7 +38,7 @@ class weibo_post(models.Model):
     # 接下来设置联合主键
     class Meta:
         unique_together = ("post_id","task_id")
-        ordering = ["post_time","forward_num","comment_num","like_num"]
+        ordering = ["-post_time","-forward_num","-comment_num","-like_num"]
         db_table = "weibo_post"
 
 class noise_judge(models.Model):
@@ -85,11 +85,11 @@ class xinlang_manage(models.Model):
 
 class xinlang_new(models.Model):
     post_id = models.CharField(primary_key=True,max_length=100)
-    author = models.CharField(max_length=100)
-    date = models.DateTimeField(null=True,blank=True)
+    user_name = models.CharField(max_length=100)
+    post_time = models.DateTimeField(null=True,blank=True)
     title = models.TextField(null=True,blank=True)
     brief = models.TextField(null=True,blank=True)
-    content = models.TextField(null=True,blank=True)
+    post_content = models.TextField(null=True,blank=True)
     detail_link = models.CharField(max_length=100)
     task_id = models.CharField(max_length=20)
     class Meta:

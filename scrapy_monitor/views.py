@@ -148,6 +148,7 @@ def day_monitor(request):
     dayMonitorList={'date':dateList,'totalNum_list':totalNum_list,'sinaWeiboNum_list':sinaWeiboNum_list,'sinaNewsNum_list':sinaNewsNum_list,'EarthquakeNum_list':EarthquakeNum_list,'TyphoonNum_list':TyphoonNum_list,'RainNum_list':RainNum_list}
     return render(request,'day_monitor.html',{'dayMonitorList':dayMonitorList})
 def timed_monitor(request):
+    cursor = connection.cursor()
     time_now = datetime.datetime.now()
     time_list =[]
     totalCount = 0

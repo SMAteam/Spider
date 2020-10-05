@@ -88,11 +88,11 @@ WSGI_APPLICATION = 'social_media_data_analyse_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'social_media',
+        'NAME': 'social_media_database',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': 'buptweb007',
         'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'PORT': '3307',
         'OPTIONS': {'charset': 'utf8mb4'}
     },
 }
@@ -157,12 +157,12 @@ CELERYBEAT_SCHEDULE = {
     #定时任务一：　定时获取cookie
     u'定时获取cookie': {
         "task": "scrapy_monitor.tasks.timed_cookies",
-        "schedule": crontab(hour='*/3'),
+        "schedule": crontab(hour='*/3',minute=0),
         "args": (),
     },
     u'定时爬虫启动': {
         "task": "scrapy_monitor.tasks.timed_task",
-        "schedule": crontab(hour='*/3',minute=10),
+        "schedule": crontab(hour='*/3',minute=20),
         "args": (),
     },
     u'定时爬取新浪新闻': {

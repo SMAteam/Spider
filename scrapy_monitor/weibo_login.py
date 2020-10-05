@@ -74,7 +74,7 @@ class CrackWeiboSlide():
         except TimeoutException:
             print('未出现验证码')
             self.open()
-        time.sleep(2)
+        time.sleep(1)
         location = img.location
         size = img.size
         # top, bottom, left, right = location['y']+70, location['y'] +130, location['x']+120, location['x'] + 250
@@ -106,9 +106,9 @@ class CrackWeiboSlide():
         cap = self.wait.until(EC.presence_of_element_located((By.ID, 'door')))
         cap.send_keys(result)
         submit.click()
-        time.sleep(10)
+        time.sleep(5)
         self.browser.get('https://weibo.com/')
-        time.sleep(15)
+        time.sleep(5)
         cookies = {i["name"]: i["value"] for i in self.browser.get_cookies()}
         print(len(cookies))
         print(cookies)

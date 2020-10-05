@@ -38,12 +38,12 @@ class ScrapyTestPipeline:
                     '([\u4e00-\u9fff]+客户端[\u4e00-\u9fff]*[\|:，：,。！.]*)|(([\u4e00-\u9fff]+新闻[\u4e00-\u9fff]*[\|:，：,。！.]*)|([\u4e00-\u9fff]+网[\u4e00-\u9fff]*[\|:，：,。！.]*)|([\u4e00-\u9fff]+早报[\|:，：,。！.]*)|([\u4e00-\u9fff]+资讯[\|:，：.,。！]*)|([\u4e00-\u9fff]+晚报[\|:，：,。！]*)|(@[\u4e00-\u9fff]+[\|:，：.,。！]*))',
                     '', item["brief"])
                 Xitem["title"] = item["title"]
-                Xitem["author"] = item["author"]
-                Xitem["date"] = item["date"]
+                Xitem["user_name"] = item["author"]
+                Xitem["post_time"] = item["date"]
                 Xitem["brief"] = item["brief"]
                 Xitem["detail_link"] = item["detail_link"]
                 # Xitem["content"] = item["content"]
-                Xitem["content"]=[]
+                Xitem["post_content"]=[]
                 Xitem["task_id"] = item["task_id"]
                 date = Xitem['date']
                 date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
@@ -66,15 +66,15 @@ class ScrapyTestPipeline:
                                 continue
                     if(len(li)<8):
                         continue
-                    Xitem["content"].append(li)
-                if(Xitem["content"]):
-                    if("记者 " in Xitem["content"][-1] or "报社" in Xitem["content"][-1]):
-                        if(len(Xitem["content"][-1])<20):
-                            del Xitem["content"][-1]
+                    Xitem["post_content"].append(li)
+                if(Xitem["post_content"]):
+                    if("记者 " in Xitem["post_content"][-1] or "报社" in Xitem["post_content"][-1]):
+                        if(len(Xitem["post_content"][-1])<20):
+                            del Xitem["post_content"][-1]
 
                 # Xitem['content'] = re.sub('\\u200b', '', Xitem['content'])
                 if (date < datetime.datetime.now()):
-                    Xitem['date'] = date
+                    Xitem['post_time'] = date
                     Xitem.save()
                 else:
                     print(date)

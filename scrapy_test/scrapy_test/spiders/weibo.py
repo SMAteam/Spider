@@ -130,10 +130,12 @@ class WeiboSpider(scrapy.Spider):
                 authentication = '1'
             elif '微博个人认证' in authentication_text:
                 authentication = '2'
-            elif '微博会员' in authentication_text:
+            elif '微博达人' in authentication_text:
                 authentication = '3'
-            else:
+            elif '微博会员' in authentication_text:
                 authentication = '4'
+            else:
+                authentication = '5'
             # 发帖user_id和post_id
             try:
                 #提取帖子发布时间
@@ -237,10 +239,12 @@ class WeiboSpider(scrapy.Spider):
                             repost_authentication = '1'
                         elif '微博个人认证' in repost_authentication_text:
                             repost_authentication = '2'
-                        elif '微博会员' in repost_authentication_text:
+                        elif '微博达人' in repost_authentication_text:
                             repost_authentication = '3'
-                        else:
+                        elif '微博会员' in repost_authentication_text:
                             repost_authentication = '4'
+                        else:
+                            repost_authentication = '5'
                         if (weibo_user.objects.filter(user_id=repost_user_id).exists() == False):
                             print("添加新用户")
                             if repost_user_id != None:
@@ -345,7 +349,7 @@ class WeiboSpider(scrapy.Spider):
                         reitem['forward_num'] = repost_forward_num
                         reitem['comment_num'] = repost_comment_num
                         reitem['like_num'] = repost_like_num
-                        reitem['repost_id'] =None
+                        reitem['repost_id'] ='-100'
                         reitem['task_id'] = self.task_id
                         yield reitem
                 else:#没有转贴信息
@@ -371,63 +375,73 @@ class WeiboSpider(scrapy.Spider):
         html= str(html)
         html = html.replace('\\t', '').replace('\\n', '').replace('\\r', '').replace(' ', '').replace('', '')
         try:
-            location = re.findall(r'<spanclass=\\"item_icoW_fl\\"><emclass=\\"W_ficonficon_cd_placeS_ficon\\">2<\\/em><\\/span><spanclass=\\"item_textW_fl\\">([\u4e00-\u9fff]+)<',html)[0]
             if response.meta["authentication"] == '1':
-                province = None
-                city = None
+                province = '-100'
+                city = '-100'
             else:
+                location = re.findall(r'<spanclass=\\"item_icoW_fl\\"><emclass=\\"W_ficonficon_cd_placeS_ficon\\">2<\\/em><\\/span><spanclass=\\"item_textW_fl\\">([\u4e00-\u9fff]+)<',html)[0]
                 lenth = len(location)
-                if (len(location) > 2):
+                if (len(location) > 3):
                     if ('内蒙古' in location or '黑龙江' in location):
-                        province = location[0:2]
-                        city = location[2:lenth]
-                        print('省:' + province + '市:' + city)
+                        province = location[0:3]
+                        city = location[3:lenth]
+                        # print('省:' + province + '市:' + city)
                     else:
                         province = location[0:2]
                         city = location[2:lenth]
-                        print('省:' + province + '市:' + city)
+                        # print('省:' + province + '市:' + city)
                 else:
                     if ('内蒙古' in location or '黑龙江' in location):
-                        province = location[0:2]
+                        province = location[0:3]
+                        city = '-100'
                         print('省:' + province)
-
                     else:
                         province = location[0:2]
                         print('省:' + province)
-                        city = None
-
+                        city = '-100'
         except:
-            province = None
-            city = None
+            province = '-100'
+            city = '-100'
         try:
-            interest = re.findall(r'<strongclass=\\"W_f18\\">(\d+)<\\/strong><spanclass=\\"S_txt2\\">关注<\\/span>',html)[0]
-            if interest == None:
+            interest = re.findall(r'>(\d+)<\\/strong><spanclass=\\"S_txt2\\">关注<\\/span>', html)
+            if interest == []:
                 interest = re.findall(r'的关注\((\d+)\)', html)[0]
+            else:
+                interest = interest[0]
+            if interest == []:
+                interest =-100
             interest = int(interest)
         except:
-            interest = None
+            interest = -100
         try:
-            fans = re.findall(r'<strongclass=\\"W_f18\\">(\d+)<\\/strong><spanclass=\\"S_txt2\\">粉丝<\\/span>',html)[0]
-            if fans==None:
+            fans = re.findall(r'>(\d+)<\\/strong><spanclass=\\"S_txt2\\">粉丝<\\/span>', html)
+            if fans == []:
                 fans = re.findall(r'的粉丝\((\d+)\)', html)[0]
+            else:
+                fans = fans[0]
+            if fans == []:
+                fans = -100
             fans = int(fans)
         except:
-            fans = None
+            fans = -100
         try:
-            weibo_num = re.findall(r'<strongclass=\\"W_f18\\">(\d+)<\\/strong><spanclass=\\"S_txt2\\">微博<\\/span>',html)[0]
+            weibo_num = re.findall(r'>(\d+)<\\/strong><spanclass=\\"S_txt2\\">微博<\\/span>', html)[0]
             weibo_num = int(weibo_num)
         except:
-            weibo_num = None
+            weibo_num = -100
         user_item = UserItem()
         user_item['user_id'] = user_id
         user_item['authentication'] = authentication
-        user_item['post_name'] = post_name
-        user_item['prov'] = province
+        user_item['user_name'] = post_name
+        user_item['province'] = province
         user_item['city'] = city
         user_item['interest'] = interest
         user_item['fans'] = fans
         user_item['weibo_num'] = weibo_num
-        user_item.save()
+        try:
+            user_item.save()
+        except:
+            pass
         return
 
 

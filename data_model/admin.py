@@ -37,14 +37,14 @@ class Weibo_postAdmin(admin.ModelAdmin):
 admin.site.register(weibo_post,Weibo_postAdmin)
 
 class Weibo_userAdmin(admin.ModelAdmin):
-    list_display = ['user_id','post_name','prov','city','authentication','fans','interest','weibo_num']
-    list_filter = ['prov']
-    search_fields = ['user_id','post_name','prov','city']
+    list_display = ['user_id','user_name','province','city','authentication','fans','interest','weibo_num']
+    list_filter = ['province']
+    search_fields = ['user_id','user_name','province','city']
     list_per_page = 100
 admin.site.register(weibo_user,Weibo_userAdmin)
 
 class Xinlang_newsAdmin(admin.ModelAdmin):
-    list_display = ['task_id','post_id','author','date','title','brief','content','detail_link']
+    list_display = ['task_id','post_id','user_name','post_time','title','brief','post_content','detail_link']
     list_filter = ['task_id']
     search_fields = ['task_id']
     list_per_page = 100
