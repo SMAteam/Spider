@@ -28,11 +28,11 @@ class CeshiSpider(scrapy.Spider):
         # surl = 'https://weibo.com/p/1005056510600179/home?from=page_100505&mod=TAB&is_hot=1&sudaref=s.weibo.com&display=0&retcode=6102'
         # surl = 'https://weibo.com/p/1005051839236994/home?from=page_100505&mod=TAB&is_hot=1#place'
         # surl = 'https://weibo.com/p/1005051770380370/home?from=page_100505&mod=TAB&is_hot=1#place'
-        # surl = 'https://weibo.com/p/1005052005302464/home?from=page_100505&mod=TAB&is_hot=1#place'  #达人
-        # surl = 'https://weibo.com/p/1005052677152963/home?from=page_100505&mod=TAB&is_hot=1#place'  #认证
+        # surl = 'https://weibo.com/p/1005051665002772/home?from=page_100505&mod=TAB&is_hot=1#place'  #达人
+        # surl = 'https://weibo.com/p/1005051665002772/home?from=page_100505&mod=TAB&is_hot=1#place'  #认证
         # surl = 'https://weibo.com/p/1005056938710690/home?from=page_100505&mod=TAB&is_hot=1#place'  #个人
         # surl = 'https://weibo.com/p/1005051469679623/home?from=page_100505&mod=TAB&is_hot=1#place'  #会员
-        surl = 'https://weibo.com/p/1005053953865079/home?from=page_100505&mod=TAB&is_hot=1#place'  #其他
+        surl = 'https://weibo.com/p/1005051657882362/home?from=page_100505&mod=TAB&is_hot=1#place'  #其他
         user_id = 3
         yield scrapy.Request(url=surl, callback=self.parse, cookies=cookies, meta={'user_id': copy.deepcopy(user_id)})
 
