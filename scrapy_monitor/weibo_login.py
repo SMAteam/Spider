@@ -134,6 +134,7 @@ class CrackWeiboSlide():
 
 
 def get_cookie():
+    cookie_list = []
     for li in U_List:
         num = 0
         print(li['USERNAME'], li['USERNAME'])
