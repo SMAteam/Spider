@@ -136,8 +136,8 @@ class CrackWeiboSlide():
 def get_cookie():
     for li in U_List:
         num = 0
-        print(li['USERNAME'], li['USERNAME'])
-        crack = CrackWeiboSlide(li['USERNAME'],li['USERNAME'])
+        print(li['USERNAME'], li['PASSWORD'])
+        crack = CrackWeiboSlide(li['USERNAME'],li['PASSWORD'])
         cookies={}
         while (len(cookies) <= 1):
             print("获取第"+str(num)+"次")
@@ -160,8 +160,8 @@ if __name__ == '__main__':
     cookie_list =[]
     for li in U_List:
         num = 0
-        print(li['USERNAME'], li['USERNAME'])
-        crack = CrackWeiboSlide(li['USERNAME'],li['USERNAME'])
+        print(li['USERNAME'], li['PASSWORD'])
+        crack = CrackWeiboSlide(li['USERNAME'],li['PASSWORD'])
         cookies={}
         while (len(cookies) <= 1):
             print("获取第"+str(num)+"次")

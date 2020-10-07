@@ -13,13 +13,14 @@ class CeshiSpider(scrapy.Spider):
     # allowed_domains = ['baidu.com']
     # start_urls = ['https://www.baidu.com']
     def start_requests(self):
-        with open(os.path.join(os.path.dirname(os.getcwd()), "scrapy_monitor", "cookie.json"), 'r') as f:
-            cookies_list = json.load(f)
-            lenth = len(cookies_list) - 1
-            i = random.randint(0, lenth)
-            print(i)
-            cookies = cookies_list[i]
-            print(cookies)
+        # with open(os.path.join(os.path.dirname(os.getcwd()), "scrapy_monitor", "cookie.json"), 'r') as f:
+        #     cookies_list = json.load(f)
+        #     lenth = len(cookies_list) - 1
+        #     i = random.randint(0, lenth)
+        #     print(i)
+        #     cookies = cookies_list[i]
+        #     print(cookies)
+        cookies = {'_s_tentry': 'passport.weibo.com', 'wb_view_log': '800*6001', 'SINAGLOBAL': '5744165866381.79.1602054057383', 'login_sid_t': 'ba40ef8f4dc5878518d6ad5dcfbf7deb', 'Apache': '5744165866381.79.1602054057383', 'SUB': '_2AkMoIeiRf8PxqwJRmf8dzGvqb4V_ywDEieKefRlKJRMxHRl-yT9jqkogtRB6A6HGfg2pA7NdJaV89WMqcf6Q7BuSBoSm', 'SUBP': '0033WrSXqPxfM72-Ws9jqgMF55529P9D9WFRUji25u9IzdLXI8ADiigk', 'WBStorage': '70753a84f86f85ff|undefined', 'ULV': '1602054057394:1:1:1:5744165866381.79.1602054057383:', 'cross_origin_proto': 'SSL'}
         # cursor = connection.cursor()
         # sql = 'select distinct(user_id) from weibo_post  where post_time >= "2020-01-01" and post_time <= "2020-02-01" limit 1000;'
         # cursor.execute(sql)

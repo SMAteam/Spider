@@ -74,6 +74,7 @@ class WeiboSpider(scrapy.Spider):
             page_num = int(response.xpath('//*[@id="pl_feedlist_index"]/div[3]/div/span/ul/li[last()]/a/text()').re(r'第(.*?)页')[0])+1
         else:
             page_num = 1
+        print('页数',page_num)
         for page in range(1, page_num + 1):
             time.sleep(1.5)
             url = 'https://s.weibo.com/weibo?q=' + self.keyword
