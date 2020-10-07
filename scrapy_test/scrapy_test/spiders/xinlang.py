@@ -2,6 +2,7 @@ import scrapy
 import os
 import json
 import re
+import random
 import copy
 import datetime
 from urllib import parse
@@ -14,8 +15,8 @@ class XinlangSpider(scrapy.Spider):
         self.range = range
         self.task_id = task_id
         with open(os.path.join(os.path.dirname(os.getcwd()), "scrapy_monitor", "cookie.json"), 'r') as f:
-            self.cookies = json.load(f)
-            print(self.cookies)
+            self.cookies_list = json.load(f)
+            print(self.cookies_list)
         self.date_time_begin = datetime.datetime.strptime(date_time_begin, '%Y-%m-%d-%H')
         self.date_time_end = datetime.datetime.strptime(date_time_end, '%Y-%m-%d-%H')
         self.days = (self.date_time_end - self.date_time_begin).days
@@ -40,7 +41,11 @@ class XinlangSpider(scrapy.Spider):
             weibo_time = '&stime='+begin_time_1+'%20'+begin_time_2+'&etime='+end_time_1+'%20'+end_time_2
             url = url + weibo_time
             print("下一小时的帖子：",url)
-            yield scrapy.Request(url=url,callback=self.parse_page,cookies=self.cookies,meta={'url':copy.deepcopy(url)})
+            lenth = len(self.cookies_list) - 1
+            i = random.randint(0, lenth)
+            cookies = self.cookies_list[i]
+            print(cookies)
+            yield scrapy.Request(url=url,callback=self.parse_page,cookies=cookies,meta={'url':copy.deepcopy(url),'cookies':copy.deepcopy(cookies)})
     def parse(self, response):
         item = {}
         Li_list = response.xpath('//div[@class="box-result clearfix"]')

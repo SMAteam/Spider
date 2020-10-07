@@ -1,5 +1,6 @@
 from html.parser import HTMLParser
 import re
+import random
 from django.db import connection
 import scrapy
 import os
@@ -13,7 +14,12 @@ class CeshiSpider(scrapy.Spider):
     # start_urls = ['https://www.baidu.com']
     def start_requests(self):
         with open(os.path.join(os.path.dirname(os.getcwd()), "scrapy_monitor", "cookie.json"), 'r') as f:
-            cookies = json.load(f)
+            cookies_list = json.load(f)
+            lenth = len(cookies_list) - 1
+            i = random.randint(0, lenth)
+            print(i)
+            cookies = cookies_list[i]
+            print(cookies)
         # cursor = connection.cursor()
         # sql = 'select distinct(user_id) from weibo_post  where post_time >= "2020-01-01" and post_time <= "2020-02-01" limit 1000;'
         # cursor.execute(sql)
@@ -21,11 +27,14 @@ class CeshiSpider(scrapy.Spider):
         # for id in id_list:
         #     user_id = id[0]
         #     # print(user_id)
+        #     i = random.randint(0, lenth)
+        #     print(i)
+        #     cookies = cookies_list[i]
         #     surl = 'https://weibo.com/p/100505'+user_id+'/home?from=page_100505&mod=TAB&is_hot=1#place'
         #     yield scrapy.Request(url=surl, callback=self.parse, cookies=cookies,meta={'user_id': copy.deepcopy(user_id)})
 
         # connection
-        # surl = 'https://weibo.com/p/1005056510600179/home?from=page_100505&mod=TAB&is_hot=1&sudaref=s.weibo.com&display=0&retcode=6102'
+        # surl = 'https://weibo.com/p/1005055445373111/home?from=page_100505&mod=TAB&is_hot=1&sudaref=s.weibo.com&display=0&retcode=6102'
         # surl = 'https://weibo.com/p/1005051839236994/home?from=page_100505&mod=TAB&is_hot=1#place'
         # surl = 'https://weibo.com/p/1005051770380370/home?from=page_100505&mod=TAB&is_hot=1#place'
         # surl = 'https://weibo.com/p/1005051665002772/home?from=page_100505&mod=TAB&is_hot=1#place'  #达人

@@ -88,11 +88,11 @@ WSGI_APPLICATION = 'social_media_data_analyse_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'social_database',
+        'NAME': 'social_media',
         'USER': 'root',
-        'PASSWORD': 'buptweb007',
-        'HOST': '152.136.59.62',
-        'PORT': '3307',
+        'PASSWORD': '123456',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'}
     },
 }
@@ -146,8 +146,10 @@ STATICFILES_DIRS = (
 from celery.schedules import crontab,timedelta
 import djcelery
 djcelery.setup_loader()
-BROKER_URL = 'redis://127.0.0.1:6379/3'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/4'
+BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
+
+CELERYD_CONCURRENCY = 1
 CELERY_IMPORTS = ('scrapy_test.tasks','scrapy_monitor.tasks')
 CELERY_TIMEZONE = TIME_ZONE
 #CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'

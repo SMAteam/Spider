@@ -21,8 +21,8 @@ class WeiboSpider(scrapy.Spider):
         self.start_urls = ['http://weibo.com/']
         # self.cookies=cookies
         with open(os.path.join(os.path.dirname(os.getcwd()),"scrapy_monitor","cookie.json"),'r') as f:
-            self.cookies = json.load(f)
-            print(self.cookies)
+            self.cookies_list = json.load(f)
+            # print(self.cookies)
         self.date_time_begin = datetime.datetime.strptime(date_time_begin, '%Y-%m-%d-%H')
         self.date_time_end = datetime.datetime.strptime(date_time_end, '%Y-%m-%d-%H')
         self.days = (self.date_time_end - self.date_time_begin).days
@@ -59,7 +59,11 @@ class WeiboSpider(scrapy.Spider):
                 url = url + '&category=4'
             url = url + '&suball=1&Refer=SWeibo_box&timescope=custom:' + weibo_time  # 热门微博
             print("下一小时的帖子:", url)
-            yield scrapy.Request(url=url,callback=self.parse,cookies=self.cookies,meta={'weibo_time':weibo_time})
+            lenth = len(self.cookies_list) - 1
+            i = random.randint(0, lenth)
+            cookies = self.cookies_list[i]
+            print(cookies)
+            yield scrapy.Request(url=url,callback=self.parse,cookies=cookies,meta={'weibo_time':weibo_time,'cookies':cookies})
     def parse(self, response):
         if response.xpath('.').re(f'抱歉，未找到'):
             print('没结果')
@@ -83,7 +87,7 @@ class WeiboSpider(scrapy.Spider):
                 url = url + '&category=4'
             url = url + '&timescope=custom:'+response.meta['weibo_time'] + '&Refer=SWeibo_box&page=' + str(page)
             print("下一页的帖子:", page,url)
-            yield scrapy.Request(url=url,callback=self.post_extract,cookies=self.cookies,meta={'weibo_time':response.meta['weibo_time'],'url':url})
+            yield scrapy.Request(url=url,callback=self.post_extract,cookies=response.meta['cookies'],meta={'weibo_time':response.meta['weibo_time'],'url':url,'cookies':response.meta['cookies']})
     def post_extract(self, response):
         # user识别
         user_re = re.compile(r'@.*')
@@ -180,7 +184,7 @@ class WeiboSpider(scrapy.Spider):
                     print("添加新用户")
                     if user_id != None:
                         user_url = 'https://weibo.com/p/100505'+user_id+'/home?from=page_100505&mod=TAB&is_hot=1#place'
-                        yield scrapy.Request(url=user_url, callback=self.user_extract,cookies=self.cookies, meta={'authentication': authentication,'user_id':user_id,'post_name':post_name})
+                        yield scrapy.Request(url=user_url, callback=self.user_extract,cookies= response.meta['cookies'], meta={'authentication': authentication,'user_id':user_id,'post_name':post_name})
                 else:
                     print("用户已存在")
                 post_id = re.search(r'/([a-zA-Z0-9]+)\?', original_post_url).group(1)
@@ -251,7 +255,7 @@ class WeiboSpider(scrapy.Spider):
                                 print("这转发是用户的id", repost_user_id)
                                 repost_user_url = 'https://weibo.com/p/100505' + repost_user_id + '/home?from=page_100505&mod=TAB&is_hot=1#place'
                                 print("这是转发用户的信息链接", repost_user_url)
-                                yield scrapy.Request(url=repost_user_url, callback=self.user_extract, cookies=self.cookies,meta={'authentication': repost_authentication, 'user_id': repost_user_id,'post_name': repost_user_name})
+                                yield scrapy.Request(url=repost_user_url, callback=self.user_extract, cookies=response.meta['cookies'],meta={'authentication': repost_authentication, 'user_id': repost_user_id,'post_name': repost_user_name})
                         else:
                             print("用户已存在")
                         # 转发的帖子的点赞评论数时间等
