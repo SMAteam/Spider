@@ -134,9 +134,8 @@ class CrackWeiboSlide():
 
 
 def get_cookie():
-    num = 0
-    cookie_list =[]
     for li in U_List:
+        num = 0
         print(li['USERNAME'], li['USERNAME'])
         crack = CrackWeiboSlide(li['USERNAME'],li['USERNAME'])
         cookies={}
@@ -150,6 +149,7 @@ def get_cookie():
                 # crack = CrackWeiboSlide()
             cookies=crack.main()
             print('cookies长度：', len(cookies))
+        if(len(cookies)>1):
             cookie_list.append(cookies)
     with open(os.path.join(os.path.dirname(__file__), '../scrapy_monitor/cookie.json'), 'w') as f:
         json.dump(cookie_list, f,ensure_ascii=False)
@@ -157,9 +157,9 @@ def get_cookie():
         print("cookies写入成功")
 
 if __name__ == '__main__':
-    num = 0
     cookie_list =[]
     for li in U_List:
+        num = 0
         print(li['USERNAME'], li['USERNAME'])
         crack = CrackWeiboSlide(li['USERNAME'],li['USERNAME'])
         cookies={}
@@ -173,6 +173,7 @@ if __name__ == '__main__':
                 # crack = CrackWeiboSlide()
             cookies=crack.main()
             print('cookies长度：', len(cookies))
+        if(len(cookies)>1):
             cookie_list.append(cookies)
     with open(os.path.join(os.path.dirname(__file__), '../scrapy_monitor/cookie.json'), 'w') as f:
         json.dump(cookie_list, f,ensure_ascii=False)
