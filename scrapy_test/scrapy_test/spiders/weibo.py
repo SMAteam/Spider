@@ -76,7 +76,7 @@ class WeiboSpider(scrapy.Spider):
             page_num = 1
         print('页数',page_num)
         for page in range(1, page_num + 1):
-            time.sleep(1.5)
+            # time.sleep(0.5)
             url = 'https://s.weibo.com/weibo?q=' + self.keyword
             if self.xsort:
                 url = url + '&xsort=hot'
@@ -181,7 +181,8 @@ class WeiboSpider(scrapy.Spider):
                 # 帖子链接
                 original_post_url = post.xpath('.//div[@class="content"]/p[@class="from"]/a[1]/@href').extract_first()
                 user_id = re.search(r'/(\d+)/', original_post_url).group(1)
-                if(weibo_user.objects.filter(user_id=user_id).exists()==False):
+                u_id = int(user_id)
+                if(weibo_user.objects.filter(user_id=u_id).exists()==False):
                     print("添加新用户")
                     if user_id != None:
                         user_url = 'https://weibo.com/p/100505'+user_id+'/home?from=page_100505&mod=TAB&is_hot=1#place'
@@ -250,7 +251,8 @@ class WeiboSpider(scrapy.Spider):
                             repost_authentication = '4'
                         else:
                             repost_authentication = '5'
-                        if (weibo_user.objects.filter(user_id=repost_user_id).exists() == False):
+                        r_u_id = int(repost_user_id)
+                        if (weibo_user.objects.filter(user_id=r_u_id).exists() == False):
                             print("添加新用户")
                             if repost_user_id != None:
                                 print("这转发是用户的id", repost_user_id)
@@ -336,7 +338,7 @@ class WeiboSpider(scrapy.Spider):
                         logging.error("转贴{}转发的帖子出现问题url:{}".format(c, response.meta['url']))
                     else:
                         item = PostItem()
-                        item['user_id'] = user_id
+                        item['user_id'] = int(user_id)
                         item['post_id'] = post_id
                         item['post_content'] = emoji.demojize(original_content)
                         item['post_time'] = post_time
@@ -347,7 +349,7 @@ class WeiboSpider(scrapy.Spider):
                         item['task_id'] = self.task_id
                         yield item
                         reitem = PostItem()
-                        reitem['user_id'] = repost_user_id
+                        reitem['user_id'] = int(repost_user_id)
                         reitem['post_id'] = repost_id
                         reitem['post_content'] = emoji.demojize(repost_content)
                         reitem['post_time'] = repost_time
@@ -359,7 +361,7 @@ class WeiboSpider(scrapy.Spider):
                         yield reitem
                 else:#没有转贴信息
                     item = PostItem()
-                    item['user_id'] = user_id
+                    item['user_id'] = int(user_id)
                     item['post_id'] = post_id
                     # item['authentication'] = authentication_text[0]
                     # item['post_name'] = post_name
@@ -435,7 +437,7 @@ class WeiboSpider(scrapy.Spider):
         except:
             weibo_num = -100
         user_item = UserItem()
-        user_item['user_id'] = user_id
+        user_item['user_id'] = int(user_id)
         user_item['authentication'] = authentication
         user_item['user_name'] = post_name
         user_item['province'] = province
