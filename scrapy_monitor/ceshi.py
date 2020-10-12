@@ -17,4 +17,6 @@ print(str3)
 str6 = "sda/sda_2019-____地震-wqe<>d.shtml"
 str7 = re.findall('sda/([a-zA-Z0-9\u4e00-\u9fff_-]+)',str6)
 print(str7)
+import datetime
+print(datetime.datetime.now().hour+1)
 

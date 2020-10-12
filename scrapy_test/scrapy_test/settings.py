@@ -58,7 +58,8 @@ COOKIES_ENABLED = True                  #默认开启cookie
 #   'Accept-Language': 'en',
 #}
 #默认请求头
-
+#解决出现的pickle问题
+CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {

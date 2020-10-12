@@ -137,8 +137,8 @@ def get_cookie():
     cookie_list = []
     for li in U_List:
         num = 0
-        print(li['USERNAME'], li['USERNAME'])
-        crack = CrackWeiboSlide(li['USERNAME'],li['USERNAME'])
+        print(li['USERNAME'], li['PASSWORD'])
+        crack = CrackWeiboSlide(li['USERNAME'],li['PASSWORD'])
         cookies={}
         while (len(cookies) <= 1):
             print("获取第"+str(num)+"次")
@@ -154,6 +154,7 @@ def get_cookie():
             cookie_list.append(cookies)
     with open(os.path.join(os.path.dirname(__file__), '../scrapy_monitor/cookie.json'), 'w') as f:
         json.dump(cookie_list, f,ensure_ascii=False)
+        f.close()
         print(cookie_list)
         print("cookies写入成功")
 
@@ -161,8 +162,8 @@ if __name__ == '__main__':
     cookie_list =[]
     for li in U_List:
         num = 0
-        print(li['USERNAME'], li['USERNAME'])
-        crack = CrackWeiboSlide(li['USERNAME'],li['USERNAME'])
+        print(li['USERNAME'], li['PASSWORD'])
+        crack = CrackWeiboSlide(li['USERNAME'],li['PASSWORD'])
         cookies={}
         while (len(cookies) <= 1):
             print("获取第"+str(num)+"次")
@@ -178,5 +179,6 @@ if __name__ == '__main__':
             cookie_list.append(cookies)
     with open(os.path.join(os.path.dirname(__file__), '../scrapy_monitor/cookie.json'), 'w') as f:
         json.dump(cookie_list, f,ensure_ascii=False)
+        f.close()
         print(cookie_list)
         print("cookies写入成功")
