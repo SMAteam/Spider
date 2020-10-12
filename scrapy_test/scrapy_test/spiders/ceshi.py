@@ -16,12 +16,13 @@ class CeshiSpider(scrapy.Spider):
         with open(os.path.join(os.path.dirname(os.getcwd()), "scrapy_monitor", "cookie.json"), 'r') as f:
             cookies_list = json.load(f)
             lenth = len(cookies_list) - 1
-            # i = random.randint(0, lenth)
-            # print(i)
-            # cookies = cookies_list[i]
-            # print(cookies)
+        #     i = random.randint(0, lenth)
+        #     print(i)
+        #     cookies = cookies_list[i]
+        #     print(cookies)
+        # cookies = {'_s_tentry': 'passport.weibo.com', 'wb_view_log': '800*6001', 'SINAGLOBAL': '5744165866381.79.1602054057383', 'login_sid_t': 'ba40ef8f4dc5878518d6ad5dcfbf7deb', 'Apache': '5744165866381.79.1602054057383', 'SUB': '_2AkMoIeiRf8PxqwJRmf8dzGvqb4V_ywDEieKefRlKJRMxHRl-yT9jqkogtRB6A6HGfg2pA7NdJaV89WMqcf6Q7BuSBoSm', 'SUBP': '0033WrSXqPxfM72-Ws9jqgMF55529P9D9WFRUji25u9IzdLXI8ADiigk', 'WBStorage': '70753a84f86f85ff|undefined', 'ULV': '1602054057394:1:1:1:5744165866381.79.1602054057383:', 'cross_origin_proto': 'SSL'}
         cursor = connection.cursor()
-        sql = 'select distinct user_id from weibo_post where user_id not in (select user_id from weibo_user) order by user_id DESC limit 2000;'
+        sql = 'select distinct(user_id) from weibo_post  where post_time >= "2020-01-01" and post_time <= "2020-02-01";'
         cursor.execute(sql)
         id_list = cursor.fetchall()
         for id in id_list:
@@ -41,9 +42,9 @@ class CeshiSpider(scrapy.Spider):
         # surl = 'https://weibo.com/p/1005051665002772/home?from=page_100505&mod=TAB&is_hot=1#place'  #认证
         # surl = 'https://weibo.com/p/1005056938710690/home?from=page_100505&mod=TAB&is_hot=1#place'  #个人
         # surl = 'https://weibo.com/p/1005051469679623/home?from=page_100505&mod=TAB&is_hot=1#place'  #会员
-        # surl = 'https://weibo.com/p/1005051657882362/home?from=page_100505&mod=TAB&is_hot=1#place'  #其他
-        # user_id = 3
-        # yield scrapy.Request(url=surl, callback=self.parse, cookies=cookies, meta={'user_id': copy.deepcopy(user_id)})
+        #surl = 'https://weibo.com/p/1005051657882362/home?from=page_100505&mod=TAB&is_hot=1#place'  #其他
+        #user_id = 3
+        #yield scrapy.Request(url=surl, callback=self.parse, cookies=cookies, meta={'user_id': copy.deepcopy(user_id)})
 
     def parse(self, response):
         # print("到达这个网页")
@@ -127,18 +128,18 @@ class CeshiSpider(scrapy.Spider):
             weibo_num = int(weibo_num)
         except:
             weibo_num = -100
-        item = UserItem()
-        item['user_id'] = int(user_id)
-        item['user_name'] = user_name
-        item['province'] = province
-        item['city'] = city
-        item['authentication'] = authentication
-        item['fans'] = fans
-        item['interest'] =interest
-        item['weibo_num'] = weibo_num
-        try:
-            item.save()
-        except:
-            pass
+        # item = UserItem()
+        # item['user_id'] = int(user_id)
+        # item['user_name'] = user_name
+        # item['province'] = province
+        # item['city'] = city
+        # item['authentication'] = authentication
+        # item['fans'] = fans
+        # item['interest'] =interest
+        # item['weibo_num'] = weibo_num
+        # try:
+        #     item.save()
+        # except:
+        #     pass
         print(user_name,user_id,authentication,province,city,interest,weibo_num,fans)
         return

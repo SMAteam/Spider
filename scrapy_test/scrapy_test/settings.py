@@ -33,7 +33,7 @@ USER_AGENT = ['Mozilla/5.0 (Windows NT 6.0) AppleWebKit/535.2 (KHTML, like Gecko
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False              #遵守robotxt协议
-DOWNLOAD_DELAY = 1
+DOWNLOAD_DELAY = 0
 RANDOMIZE_DOWNLOAD_DELAY = True
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32           #设置并发请求

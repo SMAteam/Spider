@@ -15,7 +15,7 @@ class scrapy_manage(models.Model):
     class Meta:
         db_table = "scrapy_manage"
 class weibo_user(models.Model):
-    user_id = models.CharField(primary_key=True,max_length=100)
+    user_id = models.BigIntegerField(primary_key=True,)
     user_name = models.CharField(max_length=100)
     province = models.CharField(max_length=100,null=True,blank=True)
     city = models.CharField(max_length=100,null=True,blank=True)
@@ -26,7 +26,7 @@ class weibo_user(models.Model):
     class Meta:
         db_table = "weibo_user"
 class weibo_post(models.Model):
-    user_id = models.CharField(max_length=100)
+    user_id = models.BigIntegerField(null=True,blank=True)
     post_id = models.CharField(max_length=100,)
     post_content = models.TextField(null=True,blank=True)
     post_time = models.DateTimeField(null=True,blank=True)
