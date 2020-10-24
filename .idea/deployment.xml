@@ -5,7 +5,7 @@
       <paths name="灾害分析系统">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/web/scrapy_system" local="$PROJECT_DIR$/" web="/" />
+            <mapping deploy="/" local="$PROJECT_DIR$/" web="/" />
           </mappings>
         </serverdata>
       </paths>
