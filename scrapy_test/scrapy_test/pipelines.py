@@ -25,6 +25,7 @@ class ScrapyTestPipeline:
                 else:
                     print(post_time)
                     print("日期不正确")
+
             #处理新浪新闻数据
             if spider.name == "xinlang":
                 Xitem = XinlangItem()
@@ -45,7 +46,7 @@ class ScrapyTestPipeline:
                 # Xitem["content"] = item["content"]
                 Xitem["post_content"]=[]
                 Xitem["task_id"] = item["task_id"]
-                date = Xitem['date']
+                date = Xitem['post_time']
                 date = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
                 index = 0
                 for li in item['content']:
@@ -82,4 +83,3 @@ class ScrapyTestPipeline:
         except:
             print(item)
             print('错误')
-
