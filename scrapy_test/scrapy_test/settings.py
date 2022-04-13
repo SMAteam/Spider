@@ -82,7 +82,7 @@ CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     'scrapy_test.pipelines.ScrapyTestPipeline': 300,
-    # 'scrapy_test.pipelines.Scrapy_date_filter':301,
+    'scrapy_test.pipelines.ScrapyDataFusion':301,
 }
 #item 中间件
 

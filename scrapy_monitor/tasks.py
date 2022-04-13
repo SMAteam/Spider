@@ -32,12 +32,16 @@ def timed_cookies():
 def timed_task():
     print("这是我的定时任务")
     scrapys = scrapy_manage.objects.filter(real_time_task='1')
+    real_time_task = '1'
     for s in scrapys:
         date_time_now = datetime.datetime.now()
+        dt_now = date_time_now+datetime.timedelta(hours=1)
+        dt_now = str(dt_now.year) + '-' + str(dt_now.month) + '-' + str(
+            dt_now.day) + '-' + str(dt_now.hour)
         date_time_now = str(date_time_now.year) + '-' + str(date_time_now.month) + '-' + str(
             date_time_now.day) + '-' + str(date_time_now.hour)
         date_end=s.date_time_end
-        res = scrapy_start.delay(date_end, date_time_now, s.keyword, s.xsort, s.scope, s.vip, s.category,s.task_id)
+        res = scrapy_start.delay(date_end, dt_now, s.keyword, s.xsort, s.scope, s.vip, s.category,s.task_id,real_time_task)
         q = scrapy_manage.objects.get(task_id=s.task_id)
         q.date_time_end = date_time_now
         q.scrapy_id = res.id
@@ -49,12 +53,16 @@ def timed_task():
 def xinlang_task():
     print("新浪新闻爬虫")
     Xscrapys =xinlang_manage.objects.filter(real_time_task='1')
+    real_time_task = '1'
     for s in Xscrapys:
         date_time_now = datetime.datetime.now()
+        dt_now = date_time_now+datetime.timedelta(hours=1)
+        dt_now = str(dt_now.year) + '-' + str(dt_now.month) + '-' + str(
+            dt_now.day) + '-' + str(dt_now.hour)
         date_time_now = str(date_time_now.year) + '-' + str(date_time_now.month) + '-' + str(
             date_time_now.day) + '-' + str(date_time_now.hour)
         date_end=s.date_time_end
-        res = scrapy_xinlang.delay(date_end, date_time_now, s.keyword, s.range,s.task_id)
+        res = scrapy_xinlang.delay(date_end, dt_now, s.keyword, s.range,s.task_id,real_time_task)
         q = xinlang_manage.objects.get(task_id=s.task_id)
         q.date_time_end = date_time_now
         q.scrapy_id = res.id

@@ -6,6 +6,7 @@ from PIL import Image
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import json
@@ -14,7 +15,7 @@ import base64
 import os
 import random
 from sys import version_info
-U_List = [{'USERNAME':'ifk513@163.com','PASSWORD':'KOAoym666yp'},{'USERNAME':'yuqemo@163.com','PASSWORD':'BXDfox641xW'},{'USERNAME':'mla352@163.com','PASSWORD':'BDXiix7532X'},{'USERNAME':'ioscce@163.com','PASSWORD':'CJQwdh109Ut'}]
+U_List = [{'USERNAME':'ifk513@163.com','PASSWORD':'KOAoym666yp'},{'USERNAME':'yuqemo@163.com','PASSWORD':'BXDfox641xW'},{'USERNAME':'mla352@163.com','PASSWORD':'BDXiix7532X'}]
 from selenium.webdriver.chrome.options import Options
 chrome_options = Options()
 chrome_options.add_argument('--no-sandbox')
@@ -42,14 +43,18 @@ class CrackWeiboSlide():
     def __init__(self,username,password):
         self.url = 'https://login.sina.com.cn/signup/signin.php'
         # self.browser = webdriver.Chrome()
+        self.c_service = Service('/usr/local/bin/chromedriver')
+        self.c_service.command_line_args()
+        self.c_service.start()
         self.browser = webdriver.Chrome(chrome_options=chrome_options)
         self.wait = WebDriverWait(self.browser, 20)
 
         self.username = username
         self.password = password
 
-    def __del__(self):
-        self.browser.close()
+    def close(self):
+        self.browser.quit()
+        self.c_service.stop()
 
     def open(self):
         """
@@ -152,6 +157,9 @@ def get_cookie():
             print('cookies长度：', len(cookies))
         if(len(cookies)>1):
             cookie_list.append(cookies)
+            time.sleep(10)
+            crack.close()
+
     with open(os.path.join(os.path.dirname(__file__), '../scrapy_monitor/cookie.json'), 'w') as f:
         json.dump(cookie_list, f,ensure_ascii=False)
         f.close()
@@ -177,6 +185,8 @@ if __name__ == '__main__':
             print('cookies长度：', len(cookies))
         if(len(cookies)>1):
             cookie_list.append(cookies)
+            time.sleep(10)
+            crack.close()
     with open(os.path.join(os.path.dirname(__file__), '../scrapy_monitor/cookie.json'), 'w') as f:
         json.dump(cookie_list, f,ensure_ascii=False)
         f.close()

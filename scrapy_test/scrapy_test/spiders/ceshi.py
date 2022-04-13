@@ -128,7 +128,7 @@ class CeshiSpider(scrapy.Spider):
             weibo_num = int(weibo_num)
         except:
             weibo_num = -100
-        # item = UserItem()
+        item = UserItem()
         # item['user_id'] = int(user_id)
         # item['user_name'] = user_name
         # item['province'] = province

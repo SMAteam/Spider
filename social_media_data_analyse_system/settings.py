@@ -88,11 +88,11 @@ WSGI_APPLICATION = 'social_media_data_analyse_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test',
+        'NAME': 'social_database',
         'USER': 'root',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'PASSWORD': 'buptweb007',
+        'HOST': '152.136.59.62',
+        'PORT': '3307',
         'OPTIONS': {'charset': 'utf8mb4'}
     },
 }
@@ -151,6 +151,9 @@ CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
 from celery import Celery, platforms
 platforms.C_FORCE_ROOT =True
 #CELERYD_CONCURRENCY = 1
+# 每个worker的最大任务数
+# CELERYD_MAX_TASKS_PER_CHILD = 10
+CELERY_ACCEPT_CONTENT = ['pickle', 'json', 'msgpack', 'yaml']
 CELERY_IMPORTS = ('scrapy_test.tasks','scrapy_monitor.tasks')
 CELERY_TIMEZONE = TIME_ZONE
 #CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
@@ -160,17 +163,17 @@ CELERYBEAT_SCHEDULE = {
     #定时任务一：　定时获取cookie
     u'定时获取cookie': {
         "task": "scrapy_monitor.tasks.timed_cookies",
-        "schedule": crontab(hour='*/8',minute=40),
+        "schedule": crontab(hour='*/4',minute=40),
         "args": (),
     },
    u'定时爬虫启动': {
        "task": "scrapy_monitor.tasks.timed_task",
-       "schedule": crontab(hour=0,minute=20),
+       "schedule": crontab(minute='*/30'),
        "args": (),
    },
    u'定时爬取新浪新闻': {
        "task": "scrapy_monitor.tasks.xinlang_task",
-       "schedule": crontab(hour=0,minute=30),
+       "schedule": crontab(minute='*/30'),
        "args": (),
    }
 

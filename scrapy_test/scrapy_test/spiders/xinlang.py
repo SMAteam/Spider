@@ -8,11 +8,12 @@ import datetime
 from urllib import parse
 class XinlangSpider(scrapy.Spider):
     name = 'xinlang'
-    def __init__(self,keyword,range,date_time_begin,date_time_end,task_id):
+    def __init__(self,keyword,range,date_time_begin,date_time_end,task_id,real_time_task):
         # self.allowed_domains = ['search.sina.com.cn']
         self.start_urls = ['https://search.sina.com.cn/']
         self.keyword = parse.quote(keyword)
         self.range = range
+        self.real_time_task = real_time_task
         self.task_id = task_id
         with open(os.path.join(os.path.dirname(os.getcwd()), "scrapy_monitor", "cookie.json"), 'r') as f:
             self.cookies_list = json.load(f)

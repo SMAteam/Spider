@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="152.136.59.62" id="a5c442b5-407c-436c-b5e8-f84a1e56a3ea" port="7001" customName="服务器docker连接" nameFormat="CUSTOM" username="root">
+        <option name="customName" value="服务器docker连接" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>

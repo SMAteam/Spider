@@ -94,4 +94,3 @@ class xinlang_new(models.Model):
     task_id = models.CharField(max_length=20)
     class Meta:
         unique_together = ("task_id","post_id")
-        db_table = "xinlang_new"

@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="灾害分析系统">
+  <component name="PublishConfigData" serverName="服务器爬虫">
     <serverData>
-      <paths name="灾害分析系统">
+      <paths name="publicCode">
         <serverdata>
           <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$/" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="服务器爬虫">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

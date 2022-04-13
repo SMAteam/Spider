@@ -2,8 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="cb299a32-a1d9-4e2c-9f05-388292ec132a" name="灾害分析系统" url="http://49.232.229.126">
-        <fileTransfer rootFolder="/data/DataVolume/scrapy_monitor" accessType="SFTP" host="49.232.229.126" port="8001" sshConfigId="a5c442b5-407c-436c-b5e8-f84a1e56a3ea" sshConfig="灾害分析系统">
+      <webServer id="b1cb0d1f-d329-461d-a324-e5e1fc44aae5" name="服务器爬虫" url="http://152.136.59.62">
+        <fileTransfer rootFolder="/data/DataVolume/scrapy_monitor" accessType="SFTP" host="152.136.59.62" port="7001" sshConfigId="a5c442b5-407c-436c-b5e8-f84a1e56a3ea" sshConfig="服务器docker连接">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

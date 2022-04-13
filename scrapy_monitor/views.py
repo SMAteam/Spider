@@ -45,7 +45,7 @@ def weibo_search(request):
     task_id = int(task_id)+1
     task_id = "1_"+str(task_id)
     if real_time_task=='0':#如果为实时任务
-        res = scrapy_start.delay(date_time_begin,date_time_end,keyword,xsort,scope,vip,category,task_id)
+        res = scrapy_start.delay(date_time_begin,date_time_end,keyword,xsort,scope,vip,category,task_id,real_time_task)
         data = scrapy_manage(date_time_begin=date_time_begin, date_time_end=date_time_end
                              , keyword=keyword, xsort=xsort, scope=scope, vip=vip, category=category,
                              task_id=task_id, scrapy_id=res.id,real_time_task=real_time_task)
@@ -53,7 +53,7 @@ def weibo_search(request):
     else:#如果为实时任务
         date_time_now = datetime.datetime.now()
         date_time_now = str(date_time_now.year)+'-'+str(date_time_now.month)+'-'+str(date_time_now.day)+'-'+str(date_time_now.hour)
-        res = scrapy_start.delay(date_time_begin, date_time_now, keyword, xsort, scope, vip, category, task_id)
+        res = scrapy_start.delay(date_time_begin, date_time_now, keyword, xsort, scope, vip, category, task_id,real_time_task)
         data = scrapy_manage(date_time_begin=date_time_begin,date_time_end=date_time_now
                          ,keyword=keyword,xsort=xsort,scope=scope,vip=vip,category=category,
                          task_id=task_id,scrapy_id=res.id,real_time_task=real_time_task)
@@ -84,14 +84,14 @@ def xinlang_search(request):
     task_id = int(task_id) + 1
     task_id = "2_"+str(task_id)
     if real_time_task=='0':#如果是非实时任务
-        res = scrapy_xinlang.delay(date_time_begin,date_time_end,keyword,range,task_id)
+        res = scrapy_xinlang.delay(date_time_begin,date_time_end,keyword,range,task_id,real_time_task)
         data = xinlang_manage(date_time_begin=date_time_begin,scrapy_id=res.id, date_time_end=date_time_end, keyword=keyword,range=range,task_id=task_id,real_time_task=real_time_task)
         data.save()
     else:   #如果为实时任务
         date_time_now = datetime.datetime.now()
         # date_time_now = str(date_time_now.year) + '-' + str(date_time_now.month) + '-' + str(date_time_now.day) + '-' + str(date_time_now.hour)
         date_time_now = date_time_now.strftime('%Y-%m-%d-%H')
-        res = scrapy_xinlang.delay(date_time_begin, date_time_now, keyword, range, task_id)
+        res = scrapy_xinlang.delay(date_time_begin, date_time_now, keyword, range, task_id,real_time_task)
         data = xinlang_manage(date_time_begin=date_time_begin, scrapy_id=res.id, date_time_end=date_time_now,
                               keyword=keyword, range=range, task_id=task_id, real_time_task=real_time_task)
         data.save()

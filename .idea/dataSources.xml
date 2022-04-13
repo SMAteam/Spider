@@ -7,7 +7,7 @@
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://152.136.59.62:3307</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="本地" uuid="8e041315-abc1-4d91-8fa9-d137ce2b0be6">
+    <data-source source="LOCAL" name="本地" uuid="61847054-4032-48fe-9b5e-a2f1c9ef86fa">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
@@ -15,6 +15,12 @@
       <driver-properties>
         <property name="serverTimezone" value="UTC" />
       </driver-properties>
+    </data-source>
+    <data-source source="LOCAL" name="mongodb" uuid="fb4e0bf7-f6d9-41fc-90ca-e804107671ef">
+      <driver-ref>mongo</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.dbschema.MongoJdbcDriver</jdbc-driver>
+      <jdbc-url>mongodb://152.136.59.62:27017</jdbc-url>
     </data-source>
   </component>
 </project>
